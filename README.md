@@ -78,8 +78,9 @@ Example:
 
 - TargetEntity - Entity logical name where this transformation should apply during import.
 - TargetAttribute - Attribute logical name to which attribute to target during import for the `TargetEntity`.
+- TargetRecord - `Guid` of the source record to target the transformation for specific record only.
 - TargetValue - Current value of the `TargetAttribute` that need to be replaced during import.
-- ReplacementValue - Replacement value for the `TargetValue`.
+- ReplacementValue - Replacement value for the `TargetValue`.  For EntityReference `ReplacementValue` [Guid + pipe`(|)` + EntityLogicalName] can be passed to change the type of EntityReference. For example if source record owner is SystemUser and during transformation we want to change it to team the replacement value will look like **teamid|team** `"ReplacementValue": "5563F35E-A1C0-E911-995C-00155D52BA06|team"`
 
 Example:
 
@@ -137,6 +138,19 @@ Example 3: Below example of transformation will be applied only on `new_message`
 ]
 ```
 
+Example 4: Below example of transformation will be applied only on `new_message` entity and will replace the ownerid to new ownerid guid `7E29126B-5E13-426B-B158-ABE028F74512` `team` where target record id is `5563F35E-A1C0-E911-995C-00155D52BA06`.
+
+```yaml
+[
+  {
+    "TargetEntity": "new_message",
+    "TargetAttribute": "ownerid",
+	"TargetRecord" : "5563F35E-A1C0-E911-995C-00155D52BA06",
+    "TargetValue": "*",
+    "ReplacementValue": "7E29126B-5E13-426B-B158-ABE028F74512|team"
+  }
+]
+```
 ### Connection string
 DynamicsDataToolkit support following [connection strings](https://docs.microsoft.com/en-us/powerapps/developer/data-platform/xrm-tooling/use-connection-strings-xrm-tooling-connect) to connect to dynamics instances.
 
@@ -170,7 +184,7 @@ Export-DynamicsData `
 	-EntityDataFilesPath $edPath
 ```
 
-**Cmdlet** `Import-DynamicsData` import data from Dynamics 365 instance based on the fetch xml steps provided in the job xml file or it can import data from the entity data files which is the output of the `Export-DynamicsData`. EntityDataFilesPath is the path to directory where `.xml` data files are exported.
+**Cmdlet** `Import-DynamicsData` import data from Dynamics 365 instance based on the fetch xml steps provided in the job xml file or it can import data from the entity data files which is the output of the `Export-DynamicsData`. EntityDataFilesPath is the path to directory where `.xml` data files are exported. Optional Switch Parameter DrawTree `-DrawTree` will draw batch in tree structure.  
 
 Example:
 
@@ -189,7 +203,8 @@ Import-DynamicsData `
 	-SourceConnectionString $sourceConn `
 	-TargetConnectionString $targetConn `
 	-TransformFilePath $jobTrans `
-	-JobFilePath $jobPath 
+	-JobFilePath $jobPath `
+	-DrawTree
 
 # Ex. Set 2 - Import Data from the EntityDataFilePath
 Import-DynamicsData `
