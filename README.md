@@ -145,7 +145,7 @@ Example 4: Below example of transformation will be applied only on `new_message`
   {
     "TargetEntity": "new_message",
     "TargetAttribute": "ownerid",
-	"TargetRecord" : "5563F35E-A1C0-E911-995C-00155D52BA06",
+    "TargetRecord" : "5563F35E-A1C0-E911-995C-00155D52BA06",
     "TargetValue": "*",
     "ReplacementValue": "7E29126B-5E13-426B-B158-ABE028F74512|team"
   }
